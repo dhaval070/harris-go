@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	server, err := net.Listen("tcp", ":3000")
+	server, err := net.Listen("tcp", ":30000")
 
 	if err != nil {
 		log.Fatal(err)
