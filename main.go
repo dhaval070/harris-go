@@ -50,7 +50,11 @@ func processData(conn io.Reader) {
 		}
 
 		stats := parseLine(line)
-		log.Println(json.Marshal(stats))
+		d, err := json.Marshal(stats)
+		if err != nil {
+			panic(err)
+		}
+		log.Println(string(d))
 	}
 }
 
@@ -74,41 +78,41 @@ func parseLine(line string) *Stats {
 		flag = parts[13]
 	}
 
-	re := regexp.MustCompile("/([0-9]{2})([0-9]{2})/")
+	re := regexp.MustCompile("([0-9]{2})([0-9]{2})")
 	match := re.FindStringSubmatch(parts[3])
 
 	if flag == "T" {
-		stats.clock = match[1] + ":" + match[2]
-		stats.clockMode = ":"
-		stats.clockMin = match[1]
-		stats.clockSec = match[2]
+		stats.Clock = match[1] + ":" + match[2]
+		stats.ClockMode = ":"
+		stats.ClockMin = match[1]
+		stats.ClockSec = match[2]
 
 	} else {
-		stats.clock = match[1] + "." + match[2][0:1]
-		stats.clockMode = "."
-		stats.clockMin = match[1]
-		stats.clockSec = match[2][0:1]
+		stats.Clock = match[1] + "." + match[2][0:1]
+		stats.ClockMode = "."
+		stats.ClockMin = match[1]
+		stats.ClockSec = match[2][0:1]
 	}
-	stats.clockStatus = "Running" // TODO: make it dynamic from clock data
-	stats.period = parts[6]
-	stats.homeScore = parts[4]
-	stats.guestScore = parts[5]
-	stats.gamePeriod = parts[6]
-	stats.homeShots = parts[7]
-	stats.guestShots = parts[8]
-	stats.bot = parts[1]
-	stats.hPlayer1 = parts[9][0:2]
-	stats.hPlayer1Clock = parts[9][2:3] + ":" + parts[9][3:]
-	stats.hPlayer1ClockMin = parts[9][2:3]
-	stats.hPlayer1ClockSec = parts[9][3:]
-	stats.hPlayer2 = parts[10][0:2]
-	stats.hPlayer2Clock = parts[10][2:3] + ":" + parts[9][3:]
-	stats.hPlayer2ClockMin = parts[10][2:3]
-	stats.hPlayer2ClockSec = parts[10][3:]
-	stats.vPlayer1 = parts[12][0:2]
-	stats.vPlayer1Clock = parts[11][2:3] + ":" + parts[11][3:]
-	stats.vPlayer1Min = parts[11][2:3]
-	stats.vPlayer1Sec = parts[11][3:]
+	stats.ClockStatus = "Running" // TODO: make it dynamic from Clock data
+	stats.Period = parts[6]
+	stats.HomeScore = parts[4]
+	stats.GuestScore = parts[5]
+	stats.GamePeriod = parts[6]
+	stats.HomeShots = parts[7]
+	stats.GuestShots = parts[8]
+	stats.Bot = parts[1]
+	stats.HPlayer1 = parts[9][0:2]
+	stats.HPlayer1Clock = parts[9][2:3] + ":" + parts[9][3:]
+	stats.HPlayer1ClockMin = parts[9][2:3]
+	stats.HPlayer1ClockSec = parts[9][3:]
+	stats.HPlayer2 = parts[10][0:2]
+	stats.HPlayer2Clock = parts[10][2:3] + ":" + parts[9][3:]
+	stats.HPlayer2ClockMin = parts[10][2:3]
+	stats.HPlayer2ClockSec = parts[10][3:]
+	stats.VPlayer1 = parts[12][0:2]
+	stats.VPlayer1Clock = parts[11][2:3] + ":" + parts[11][3:]
+	stats.VPlayer1Min = parts[11][2:3]
+	stats.VPlayer1Sec = parts[11][3:]
 	return &stats
 }
 
