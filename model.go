@@ -10,7 +10,6 @@ type Stats struct {
 	ClockMin         string
 	ClockSec         string
 	ClockMode        string
-	ClockStatus      string
 	Period           string
 	Bot              string
 	HPlayer1         string

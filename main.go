@@ -1,3 +1,5 @@
+//Application to listen on part for harris clock and parse the data
+//Author: dhaval dhanani <dhaval070@gmail.com>
 package main
 
 import (
@@ -68,6 +70,10 @@ func parseLine(line string) *Stats {
 	line = line[pos:]
 	parts := strings.Split(line, "/")
 
+	if len(parts) != 15 {
+		return nil
+	}
+
 	for i, s := range parts {
 		parts[i] = reverse(s)
 	}
@@ -93,7 +99,6 @@ func parseLine(line string) *Stats {
 		stats.ClockMin = match[1]
 		stats.ClockSec = match[2][0:1]
 	}
-	stats.ClockStatus = "Running" // TODO: make it dynamic from Clock data
 	stats.Period = parts[6]
 	stats.HomeScore = parts[4]
 	stats.GuestScore = parts[5]
