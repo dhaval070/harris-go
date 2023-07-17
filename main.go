@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"io"
 	"log"
 	"net"
@@ -16,19 +17,20 @@ func main() {
 		log.Fatal(err)
 	}
 
+	log.Println("listening")
+
 	for {
 		conn, err := server.Accept()
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		log.Println("connected")
+		processData(conn)
+
 		if err := conn.Close(); err != nil {
 			log.Println(err)
 		}
-
-		processData(conn)
-
-		break
 	}
 }
 
@@ -37,14 +39,18 @@ func processData(conn io.Reader) {
 
 	buff.Split(split)
 
+	log.Println("scanning")
+
 	for buff.Scan() {
 		line := buff.Text()
+		log.Println(line)
 
 		if line == "" {
 			break
 		}
 
-		parseLine(line)
+		stats := parseLine(line)
+		log.Println(json.Marshal(stats))
 	}
 }
 
