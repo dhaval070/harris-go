@@ -5,6 +5,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"flag"
 	"io"
 	"log"
 	"net"
@@ -13,13 +14,18 @@ import (
 )
 
 func main() {
-	server, err := net.Listen("tcp", ":30000")
+	var port string
+
+	flag.StringVar(&port, "port", "30000", "port number")
+	flag.Parse()
+
+	server, err := net.Listen("tcp", ":"+port)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("listening")
+	log.Println("listening at ", server.Addr())
 
 	for {
 		conn, err := server.Accept()
